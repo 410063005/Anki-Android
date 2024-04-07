@@ -198,6 +198,7 @@ open class DeckPicker :
     private var studyoptionsFrame: View? = null // not lateInit - can be null
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     lateinit var recyclerView: RecyclerView
+    lateinit var mainView: View
     private lateinit var recyclerViewLayoutManager: LinearLayoutManager
     private lateinit var deckListAdapter: DeckAdapter
     lateinit var exportingDelegate: ActivityExportingDelegate
@@ -426,8 +427,8 @@ open class DeckPicker :
         }
 
         setContentView(R.layout.homescreen)
+        mainView = findViewById<View>(android.R.id.content)
         handleStartup()
-        val mainView = findViewById<View>(android.R.id.content)
 
         // check, if tablet layout
         studyoptionsFrame = findViewById(R.id.studyoptions_fragment)
@@ -1477,7 +1478,10 @@ open class DeckPicker :
                 // Don't show new features dialog for development builds
                 InitialActivity.setUpgradedToLatestVersion(preferences)
                 val ver = resources.getString(R.string.updated_version, VersionUtils.pkgVersionName)
-                showSnackbar(ver, Snackbar.LENGTH_SHORT)
+                mainView.post {
+                    showSnackbar(ver, Snackbar.LENGTH_SHORT)
+                }
+
                 showStartupScreensAndDialogs(preferences, 2)
             }
         } else {
