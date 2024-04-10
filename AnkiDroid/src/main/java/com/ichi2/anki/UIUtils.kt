@@ -9,6 +9,18 @@ import androidx.annotation.StringRes
 import com.ichi2.libanki.utils.Time
 import java.util.*
 
+fun getDayStart(time: Time): Long {
+    val cal = time.calendar()
+    if (cal[Calendar.HOUR_OF_DAY] < 4) {
+        cal.roll(Calendar.DAY_OF_YEAR, -1)
+    }
+    cal[Calendar.HOUR_OF_DAY] = 4
+    cal[Calendar.MINUTE] = 0
+    cal[Calendar.SECOND] = 0
+    cal[Calendar.MILLISECOND] = 0
+    return cal.timeInMillis
+}
+
 object UIUtils {
     fun showThemedToast(context: Context, text: String, shortLength: Boolean) {
         Toast.makeText(context, text, if (shortLength) Toast.LENGTH_SHORT else Toast.LENGTH_LONG).show()
@@ -24,18 +36,6 @@ object UIUtils {
 
     fun getDensityAdjustedValue(context: Context, value: Float): Float {
         return context.resources.displayMetrics.density * value
-    }
-
-    fun getDayStart(time: Time): Long {
-        val cal = time.calendar()
-        if (cal[Calendar.HOUR_OF_DAY] < 4) {
-            cal.roll(Calendar.DAY_OF_YEAR, -1)
-        }
-        cal[Calendar.HOUR_OF_DAY] = 4
-        cal[Calendar.MINUTE] = 0
-        cal[Calendar.SECOND] = 0
-        cal[Calendar.MILLISECOND] = 0
-        return cal.timeInMillis
     }
 
     /**
